@@ -66,6 +66,14 @@ function addXp(userId, amount) {
   return { leveledUp, newLevel };
 }
 
+// Criar barra de progresso
+function createProgressBar(current, max, size = 10) {
+  const percentage = current / max;
+  const filled = Math.round(percentage * size);
+  const empty = size - filled;
+  return '█'.repeat(filled) + '░'.repeat(empty);
+}
+
 // Event: Bot conectado
 client.on('ready', () => {
   console.log(`✅ Bot conectado como ${client.user.tag}`);
@@ -113,7 +121,7 @@ client.on('messageCreate', async (message) => {
     const command = args[0].toLowerCase();
 
     // Comando: !level
-    if (command === 'level' || command === 'xp') {
+    if (command === 'level') {
       const targetUser = message.mentions.users.first() || message.author;
       const stats = getUserStats(targetUser.id);
 
@@ -122,32 +130,38 @@ client.on('messageCreate', async (message) => {
       const nextLevelXp = stats.level * xpPerLevel;
       const xpProgress = stats.xp - currentLevelXp;
       const xpNeeded = nextLevelXp - currentLevelXp;
+      const percentage = Math.round((xpProgress / xpNeeded) * 100);
 
       message.reply({
         embeds: [
           {
             color: 0x5865f2,
-            title: `📊 Estatísticas de ${targetUser.username}`,
+            author: {
+              name: targetUser.username,
+              icon_url: targetUser.displayAvatarURL(),
+            },
             fields: [
               {
-                name: '📈 Nível',
+                name: 'Nível',
                 value: `${stats.level}`,
                 inline: true,
               },
               {
-                name: '⭐ XP Total',
+                name: 'XP Total',
                 value: `${stats.xp}`,
                 inline: true,
               },
               {
-                name: '🎯 Progresso',
-                value: `${xpProgress}/${xpNeeded}`,
-                inline: true,
+                name: ' ',
+                value: ' ',
+                inline: false,
+              },
+              {
+                name: 'Progresso',
+                value: `${createProgressBar(xpProgress, xpNeeded)} ${percentage}%\n${xpProgress}/${xpNeeded} XP`,
+                inline: false,
               },
             ],
-            footer: {
-              text: 'Continue enviando mensagens para ganhar XP!',
-            },
           },
         ],
       });
@@ -163,9 +177,11 @@ client.on('messageCreate', async (message) => {
         sorted.map(async ([userId, stats], index) => {
           try {
             const user = await client.users.fetch(userId);
-            return `${index + 1}. **${user.username}** - Nível ${stats.level} (${stats.xp} XP)`;
+            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+            return `${medal} **${user.username}** — Nível ${stats.level} • ${stats.xp} XP`;
           } catch {
-            return `${index + 1}. **Unknown User** - Nível ${stats.level} (${stats.xp} XP)`;
+            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+            return `${medal} **Unknown User** — Nível ${stats.level} • ${stats.xp} XP`;
           }
         })
       );
