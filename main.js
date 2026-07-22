@@ -166,7 +166,7 @@ if (result.leveledUp) {
     result.newLevel
   );
 
-  const levelUpChannel = message.guild.channels.cache.get("ID_DO_CANAL");
+  const levelUpChannel = message.guild.channels.cache.get(1529588347754774648);
 
   if (levelUpChannel) {
     levelUpChannel.send({
