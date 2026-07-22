@@ -1,6 +1,5 @@
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
-const fs = require('fs');
-const path = require('path');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const client = new Client({
@@ -15,8 +14,15 @@ const client = new Client({
 // Carregar configurações
 const config = require('./config.json');
 
-// Armazenar usuários e XP (em memória para agora, depois pode ser um banco de dados)
-const userStats = new Map();
+// Schema do usuário
+const userSchema = new mongoose.Schema({
+  userId: { type: String, unique: true, required: true },
+  xp: { type: Number, default: 0 },
+  level: { type: Number, default: 1 },
+  lastMessageTime: { type: Number, default: 0 },
+});
+
+const User = mongoose.model('User', userSchema);
 
 // Mensagens de level up variadas
 const levelUpMessages = [
@@ -31,51 +37,33 @@ const levelUpMessages = [
   'Eu jurava que o mundo estava acabando, mas quando vi, era só o {user} atingindo o nível {level}',
 ];
 
-// Carregar dados salvos
-function loadUserStats() {
-  if (fs.existsSync('./data/users.json')) {
-    const data = fs.readFileSync('./data/users.json', 'utf-8');
-    const parsed = JSON.parse(data);
-    Object.entries(parsed).forEach(([key, value]) => {
-      userStats.set(key, value);
-    });
-  }
-}
-
-// Salvar dados
-function saveUserStats() {
-  if (!fs.existsSync('./data')) {
-    fs.mkdirSync('./data');
-  }
-  const data = Object.fromEntries(userStats);
-  fs.writeFileSync('./data/users.json', JSON.stringify(data, null, 2));
-}
-
 // Obter stats do usuário
-function getUserStats(userId) {
-  if (!userStats.has(userId)) {
-    userStats.set(userId, {
+async function getUserStats(userId) {
+  let user = await User.findOne({ userId });
+  if (!user) {
+    user = await User.create({
+      userId,
       xp: 0,
       level: 1,
       lastMessageTime: 0,
     });
   }
-  return userStats.get(userId);
+  return user;
 }
 
 // Adicionar XP
-function addXp(userId, amount) {
-  const stats = getUserStats(userId);
-  stats.xp += amount;
+async function addXp(userId, amount) {
+  const user = await getUserStats(userId);
+  user.xp += amount;
 
   // Calcular novo nível
   const xpPerLevel = config.xp.xpPerLevel;
-  const newLevel = Math.floor(stats.xp / xpPerLevel) + 1;
+  const newLevel = Math.floor(user.xp / xpPerLevel) + 1;
 
-  const leveledUp = newLevel > stats.level;
-  stats.level = newLevel;
+  const leveledUp = newLevel > user.level;
+  user.level = newLevel;
 
-  saveUserStats();
+  await user.save();
   return { leveledUp, newLevel };
 }
 
@@ -96,9 +84,16 @@ function getRandomLevelUpMessage(username, level) {
 }
 
 // Event: Bot conectado
-client.on('ready', () => {
+client.on('ready', async () => {
   console.log(`✅ Bot conectado como ${client.user.tag}`);
-  loadUserStats();
+  
+  // Conectar ao MongoDB
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('✅ Conectado ao MongoDB!');
+  } catch (error) {
+    console.error('❌ Erro ao conectar ao MongoDB:', error);
+  }
 });
 
 // Event: Mensagem recebida
@@ -107,7 +102,7 @@ client.on('messageCreate', async (message) => {
   if (message.author.bot || !message.guild) return;
 
   const userId = message.author.id;
-  const stats = getUserStats(userId);
+  const stats = await getUserStats(userId);
   const now = Date.now();
 
   // Verificar cooldown
@@ -121,8 +116,9 @@ client.on('messageCreate', async (message) => {
       config.xp.minXpPerMessage
   );
 
-  const result = addXp(userId, xpGained);
+  const result = await addXp(userId, xpGained);
   stats.lastMessageTime = now;
+  await stats.save();
 
   // Se subiu de nível, enviar mensagem
   if (result.leveledUp) {
@@ -145,7 +141,7 @@ client.on('messageCreate', async (message) => {
     // Comando: !pf (profile)
     if (command === 'pf') {
       const targetUser = message.mentions.users.first() || message.author;
-      const stats = getUserStats(targetUser.id);
+      const stats = await getUserStats(targetUser.id);
 
       const xpPerLevel = config.xp.xpPerLevel;
       const currentLevelXp = (stats.level - 1) * xpPerLevel;
@@ -213,7 +209,7 @@ client.on('messageCreate', async (message) => {
         return;
       }
 
-      const result = addXp(targetUser.id, xpAmount);
+      const result = await addXp(targetUser.id, xpAmount);
       message.reply({
         content: `✅ ${xpAmount} XP adicionado para **${targetUser.username}**! Nível atual: **${result.newLevel}**`,
         ephemeral: false,
@@ -222,14 +218,12 @@ client.on('messageCreate', async (message) => {
 
     // Comando: !leaderboard
     if (command === 'leaderboard' || command === 'top') {
-      const sorted = Array.from(userStats.entries())
-        .sort((a, b) => b[1].xp - a[1].xp)
-        .slice(0, 10);
+      const users = await User.find().sort({ xp: -1 }).limit(10);
 
       const leaderboardText = await Promise.all(
-        sorted.map(async ([userId, stats], index) => {
+        users.map(async (stats, index) => {
           try {
-            const user = await client.users.fetch(userId);
+            const user = await client.users.fetch(stats.userId);
             const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
             return `${medal} **${user.username}** — Nível ${stats.level} • ${stats.xp} XP`;
           } catch {
