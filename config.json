@@ -3,7 +3,7 @@
     "minXpPerMessage": 5,
     "maxXpPerMessage": 35,
     "baseXpPerLevel": 100,
-    "levelMultiplier": 1.5,
+    "levelMultiplier": 1.1,
     "cooldownSeconds": 40
   },
   "prefix": "!"
