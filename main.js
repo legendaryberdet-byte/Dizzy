@@ -128,7 +128,7 @@ client.on('messageCreate', async (message) => {
   if (result.leveledUp) {
     const levelUpMessage = getRandomLevelUpMessage(message.author.username, result.newLevel);
     message.reply({
-      content: `🎉 ${levelUpMessage}`,
+      content: levelUpMessage,
       ephemeral: false,
     });
   }
@@ -142,8 +142,8 @@ client.on('messageCreate', async (message) => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/);
     const command = args[0].toLowerCase();
 
-    // Comando: !level
-    if (command === 'level') {
+    // Comando: !pf (profile)
+    if (command === 'pf') {
       const targetUser = message.mentions.users.first() || message.author;
       const stats = getUserStats(targetUser.id);
 
@@ -246,7 +246,7 @@ client.on('messageCreate', async (message) => {
             title: '🏆 Leaderboard de XP',
             description: leaderboardText.join('\n'),
             footer: {
-              text: 'Use !level para ver seus stats!',
+              text: 'Use !pf para ver seus stats!',
             },
           },
         ],
