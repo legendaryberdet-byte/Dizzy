@@ -1,0 +1,9 @@
+{
+  "xp": {
+    "minXpPerMessage": 5,
+    "maxXpPerMessage": 15,
+    "xpPerLevel": 100,
+    "cooldownSeconds": 10
+  },
+  "prefix": "!"
+}
