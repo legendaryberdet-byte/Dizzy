@@ -38,6 +38,18 @@ const levelUpMessages = [
   'Eu jurava que o mundo estava acabando, mas quando vi, era só o {user} atingindo o nível {level}',
 ];
 
+// Calcular XP necessário para um nível
+function getXpForLevel(level) {
+  const baseXp = config.xp.baseXpPerLevel;
+  const multiplier = config.xp.levelMultiplier;
+  
+  let totalXp = 0;
+  for (let i = 1; i < level; i++) {
+    totalXp += Math.floor(baseXp * Math.pow(multiplier, i - 1));
+  }
+  return totalXp;
+}
+
 // Obter stats do usuário
 async function getUserStats(userId) {
   let user = await User.findOne({ userId });
@@ -59,8 +71,10 @@ async function addXp(userId, amount) {
   user.xp += amount;
 
   // Calcular novo nível
-  const xpPerLevel = config.xp.xpPerLevel;
-  const newLevel = Math.floor(user.xp / xpPerLevel) + 1;
+  let newLevel = 1;
+  while (user.xp >= getXpForLevel(newLevel + 1)) {
+    newLevel++;
+  }
 
   const leveledUp = newLevel > user.level;
   user.level = newLevel;
@@ -153,9 +167,8 @@ client.on('messageCreate', async (message) => {
       const stats = await getUserStats(targetUser.id);
       const rank = await getRankPosition(targetUser.id);
 
-      const xpPerLevel = config.xp.xpPerLevel;
-      const currentLevelXp = (stats.level - 1) * xpPerLevel;
-      const nextLevelXp = stats.level * xpPerLevel;
+      const currentLevelXp = getXpForLevel(stats.level);
+      const nextLevelXp = getXpForLevel(stats.level + 1);
       const xpProgress = stats.xp - currentLevelXp;
       const xpNeeded = nextLevelXp - currentLevelXp;
       const xpRemaining = xpNeeded - xpProgress;
