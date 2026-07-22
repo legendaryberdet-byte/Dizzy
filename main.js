@@ -187,4 +187,4 @@ client.on('messageCreate', async (message) => {
 });
 
 // Conectar ao Discord
-client.login(process.env.MTUyOTMwNjYyNDM4MzI1NDU1OA.GASroB.IfKiNSFD-l8RhVQr9yuRHOHVjt_CDwybKJQKmA);
+client.login(process.env.TOKEN);
