@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
   userId: { type: String, unique: true, required: true },
   xp: { type: Number, default: 0 },
   level: { type: Number, default: 1 },
+  messages: { type: Number, default: 0 },
   lastMessageTime: { type: Number, default: 0 },
 });
 
@@ -45,6 +46,7 @@ async function getUserStats(userId) {
       userId,
       xp: 0,
       level: 1,
+      messages: 0,
       lastMessageTime: 0,
     });
   }
@@ -65,6 +67,12 @@ async function addXp(userId, amount) {
 
   await user.save();
   return { leveledUp, newLevel };
+}
+
+// Obter posição no leaderboard
+async function getRankPosition(userId) {
+  const usersAbove = await User.countDocuments({ xp: { $gt: (await getUserStats(userId)).xp } });
+  return usersAbove + 1;
 }
 
 // Criar barra de progresso
@@ -117,6 +125,7 @@ client.on('messageCreate', async (message) => {
   );
 
   const result = await addXp(userId, xpGained);
+  stats.messages += 1;
   stats.lastMessageTime = now;
   await stats.save();
 
@@ -142,12 +151,14 @@ client.on('messageCreate', async (message) => {
     if (command === 'pf') {
       const targetUser = message.mentions.users.first() || message.author;
       const stats = await getUserStats(targetUser.id);
+      const rank = await getRankPosition(targetUser.id);
 
       const xpPerLevel = config.xp.xpPerLevel;
       const currentLevelXp = (stats.level - 1) * xpPerLevel;
       const nextLevelXp = stats.level * xpPerLevel;
       const xpProgress = stats.xp - currentLevelXp;
       const xpNeeded = nextLevelXp - currentLevelXp;
+      const xpRemaining = xpNeeded - xpProgress;
       const percentage = Math.round((xpProgress / xpNeeded) * 100);
 
       message.reply({
@@ -163,23 +174,33 @@ client.on('messageCreate', async (message) => {
             },
             fields: [
               {
+                name: 'Posição',
+                value: `#${rank}`,
+                inline: true,
+              },
+              {
                 name: 'Nível',
                 value: `${stats.level}`,
                 inline: true,
               },
               {
-                name: 'XP Total',
-                value: `${stats.xp}`,
+                name: 'Mensagens',
+                value: `${stats.messages}`,
                 inline: true,
               },
               {
-                name: ' ',
-                value: ' ',
+                name: 'XP Total',
+                value: `${stats.xp}`,
                 inline: false,
               },
               {
                 name: 'Progresso',
                 value: `${createProgressBar(xpProgress, xpNeeded)} ${percentage}%\n${xpProgress}/${xpNeeded} XP`,
+                inline: false,
+              },
+              {
+                name: 'XP Faltando',
+                value: `${xpRemaining} XP pro próximo nível`,
                 inline: false,
               },
             ],
