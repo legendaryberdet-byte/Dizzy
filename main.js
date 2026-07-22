@@ -21,7 +21,12 @@ const userSchema = new mongoose.Schema({
   level: { type: Number, default: 1 },
   messages: { type: Number, default: 0 },
 
-  // Cooldown do XP
+  // Economia Dizzles 🪙
+  dizzles: { type: Number, default: 0 },
+  lastDizzleTime: { type: Number, default: 0 },
+
+
+// Cooldown do XP
   lastMessageTime: { type: Number, default: 0 },
 });
 
@@ -128,6 +133,14 @@ client.on('messageCreate', async (message) => {
   const userId = message.author.id;
   const stats = await getUserStats(userId);
   const now = Date.now();
+
+  // Sistema de Dizzles 🪙
+  if (now - stats.lastDizzleTime >= 60000) {
+    stats.dizzles += 1;
+    stats.lastDizzleTime = now;
+
+    await stats.save();
+  }
   
   
 // Verificar cooldown
