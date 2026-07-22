@@ -178,6 +178,15 @@ if (result.leveledUp) {
 });
 
 // Comando: Ver XP/Level (prefix command)
+
+client.on('messageCreate', async (message) => {
+  console.log("Mensagem recebida:", message.content);
+
+  if (message.author.bot || !message.guild) return;
+
+
+
+
 client.on('messageCreate', async (message) => {
   if (message.author.bot || !message.guild) return;
 
