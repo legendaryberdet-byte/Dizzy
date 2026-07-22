@@ -18,6 +18,19 @@ const config = require('./config.json');
 // Armazenar usuários e XP (em memória para agora, depois pode ser um banco de dados)
 const userStats = new Map();
 
+// Mensagens de level up variadas
+const levelUpMessages = [
+  '{user} atingiu o nível {level}, parabéns!',
+  'Temam todos, {user} acaba de atingir o nível {level}.',
+  'O nível {level} parecia ser inalcançável, porém {user} provou o contrário.',
+  '{user} falou algo e sem querer atingiu o nível {level}!',
+  'O nível {level} combina com {user}.',
+  '{user} atingiu o nível {level}!!! Corram para as colinas!!!',
+  '{user} chegou ao nível {level}, nada mal!',
+  '{user} caiu no chão e atingiu o nível {level} aprendendo com os próprios erros!',
+  'Eu jurava que o mundo estava acabando, mas quando vi, era só o {user} atingindo o nível {level}',
+];
+
 // Carregar dados salvos
 function loadUserStats() {
   if (fs.existsSync('./data/users.json')) {
@@ -74,6 +87,14 @@ function createProgressBar(current, max, size = 10) {
   return '█'.repeat(filled) + '░'.repeat(empty);
 }
 
+// Pegar mensagem de level up aleatória
+function getRandomLevelUpMessage(username, level) {
+  const randomMessage = levelUpMessages[Math.floor(Math.random() * levelUpMessages.length)];
+  return randomMessage
+    .replace('{user}', `**${username}**`)
+    .replace('{level}', `**${level}**`);
+}
+
 // Event: Bot conectado
 client.on('ready', () => {
   console.log(`✅ Bot conectado como ${client.user.tag}`);
@@ -105,8 +126,9 @@ client.on('messageCreate', async (message) => {
 
   // Se subiu de nível, enviar mensagem
   if (result.leveledUp) {
+    const levelUpMessage = getRandomLevelUpMessage(message.author.username, result.newLevel);
     message.reply({
-      content: `🎉 **${message.author.username}** subiu para o **nível ${result.newLevel}**! Parabéns!`,
+      content: `🎉 ${levelUpMessage}`,
       ephemeral: false,
     });
   }
@@ -140,6 +162,9 @@ client.on('messageCreate', async (message) => {
               name: targetUser.username,
               icon_url: targetUser.displayAvatarURL(),
             },
+            thumbnail: {
+              url: targetUser.displayAvatarURL(),
+            },
             fields: [
               {
                 name: 'Nível',
@@ -164,6 +189,34 @@ client.on('messageCreate', async (message) => {
             ],
           },
         ],
+      });
+    }
+
+    // Comando: !addxp (SOMENTE DONO)
+    if (command === 'addxp') {
+      if (message.author.id !== process.env.OWNER_ID) {
+        message.reply({
+          content: '❌ Você não tem permissão para usar este comando!',
+          ephemeral: true,
+        });
+        return;
+      }
+
+      const targetUser = message.mentions.users.first();
+      const xpAmount = parseInt(args[1]);
+
+      if (!targetUser || isNaN(xpAmount)) {
+        message.reply({
+          content: '❌ Uso: `!addxp @usuário <quantidade>`',
+          ephemeral: true,
+        });
+        return;
+      }
+
+      const result = addXp(targetUser.id, xpAmount);
+      message.reply({
+        content: `✅ ${xpAmount} XP adicionado para **${targetUser.username}**! Nível atual: **${result.newLevel}**`,
+        ephemeral: false,
       });
     }
 
