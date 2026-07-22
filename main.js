@@ -159,15 +159,21 @@ client.on('messageCreate', async (message) => {
   stats.lastMessageTime = now;
   await stats.save();
 
-  // Se subiu de nível, enviar mensagem
-  if (result.leveledUp) {
-    const levelUpMessage = getRandomLevelUpMessage(message.author.username, result.newLevel);
-    message.reply({
+// Se subiu de nível, enviar mensagem no canal de level ups
+if (result.leveledUp) {
+  const levelUpMessage = getRandomLevelUpMessage(
+    message.author.username,
+    result.newLevel
+  );
+
+  const levelUpChannel = message.guild.channels.cache.get("ID_DO_CANAL");
+
+  if (levelUpChannel) {
+    levelUpChannel.send({
       content: levelUpMessage,
-      ephemeral: false,
     });
   }
-});
+}
 
 // Comando: Ver XP/Level (prefix command)
 client.on('messageCreate', async (message) => {
