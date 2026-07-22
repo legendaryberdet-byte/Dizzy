@@ -132,8 +132,16 @@ client.on('messageCreate', async (message) => {
   const userId = message.author.id;
   const stats = await getUserStats(userId);
   const now = Date.now();
+  
+// Sistema de Dizzles 🪙
+  if (now - stats.lastDizzleTime >= 60000) {
+    stats.dizzles += 1;
+    stats.lastDizzleTime = now;
 
-  // Verificar cooldown
+    await stats.save();
+  }
+  
+// Verificar cooldown
   if (now - stats.lastMessageTime < config.xp.cooldownSeconds * 1000) {
     return;
   }
