@@ -20,6 +20,12 @@ const userSchema = new mongoose.Schema({
   xp: { type: Number, default: 0 },
   level: { type: Number, default: 1 },
   messages: { type: Number, default: 0 },
+
+  // Economia Dizzles 🪙
+  dizzles: { type: Number, default: 0 },
+  lastDizzleTime: { type: Number, default: 0 },
+
+  // Cooldown do XP
   lastMessageTime: { type: Number, default: 0 },
 });
 
