@@ -456,5 +456,30 @@ if (command === 'saldo') {
   }
 });
 
+client.on("interactionCreate", async interaction => {
+
+    if (!interaction.isStringSelectMenu()) return;
+
+    if (interaction.customId !== "equip_role") return;
+
+    const roleId = interaction.values[0];
+
+    for (const id of Object.values(levelRoles)) {
+
+        if (interaction.member.roles.cache.has(id)) {
+            await interaction.member.roles.remove(id).catch(() => {});
+        }
+
+    }
+
+    await interaction.member.roles.add(roleId);
+
+    await interaction.reply({
+        content: "Cargo equipado com sucesso!",
+        ephemeral: true
+    });
+
+});
+
 // Conectar ao Discord
 client.login(process.env.DISCORD_TOKEN);
