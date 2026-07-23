@@ -135,10 +135,6 @@ function getRandomLevelUpMessage(userId, level) {
     .replace('{level}', `**${level}**`);
 }
 
-const levelUpMessage = getRandomLevelUpMessage(
-  message.author.id,
-  result.newLevel
-);
 
 // Event: Bot conectado
 client.on('ready', async () => {
@@ -191,7 +187,7 @@ client.on('messageCreate', async (message) => {
 if (result.leveledUp) {
 
   const levelUpMessage = getRandomLevelUpMessage(
-    message.author.username,
+    message.author.id,
     result.newLevel
   );
 
