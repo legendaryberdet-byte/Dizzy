@@ -93,17 +93,6 @@ async function getUserStats(userId) {
   return user;
 }
 
-// Comando: !saldo
-if (command === 'saldo') {
-  const targetUser = message.mentions.users.first() || message.author;
-
-  const stats = await getUserStats(targetUser.id);
-
-  message.reply({
-    content: `**${targetUser.username}** possui **${stats.dizzles} <:emoji_20:1529517320118993076>**!`
-  });
-}
-
 
 // Adicionar XP
 async function addXp(userId, amount) {
@@ -236,7 +225,18 @@ client.on('messageCreate', async (message) => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/);
     const command = args[0].toLowerCase();
 
-    // Comando: !pf (profile)
+  // Comando: !saldo
+if (command === 'saldo') {
+  const targetUser = message.mentions.users.first() || message.author;
+
+  const stats = await getUserStats(targetUser.id);
+
+  message.reply({
+    content: `**${targetUser.username}** possui **${stats.dizzles} <:emoji_20:1529517320118993076>**!`
+  });
+}  
+
+// Comando: !pf (profile)
     if (command === 'pf') {
       const targetUser = message.mentions.users.first() || message.author;
       const stats = await getUserStats(targetUser.id);
