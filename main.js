@@ -34,15 +34,15 @@ const User = mongoose.model('User', userSchema);
 
 // Mensagens de level up variadas
 const levelUpMessages = [
-  '{@user} atingiu o nível {level}, parabéns!',
-  'Temam todos, {@user} acaba de atingir o nível {level}.',
-  'O nível {level} parecia ser inalcançável, porém {@user} provou o contrário.',
-  '{@user} falou algo e sem querer atingiu o nível {level}!',
-  'O nível {level} combina com {@user}.',
-  '{@user} atingiu o nível {level}!!! Corram para as colinas!!!',
-  '{@user} chegou ao nível {level}, nada mal!',
-  '{@user} caiu no chão e atingiu o nível {level} aprendendo com os próprios erros!',
-  'Eu jurava que o mundo estava acabando, mas quando vi, era só o {@user} atingindo o nível {level}',
+  '{user} atingiu o nível {level}, parabéns!',
+  'Temam todos, {user} acaba de atingir o nível {level}.',
+  'O nível {level} parecia ser inalcançável, porém {user} provou o contrário.',
+  '{user} falou algo e sem querer atingiu o nível {level}!',
+  'O nível {level} combina com {user}.',
+  '{user} atingiu o nível {level}!!! Corram para as colinas!!!',
+  '{user} chegou ao nível {level}, nada mal!',
+  '{user} caiu no chão e atingiu o nível {level} aprendendo com os próprios erros!',
+  'Eu jurava que o mundo estava acabando, mas quando vi, era só o {user} atingindo o nível {level}',
 ];
 
 // Cargos desbloqueados por nível
