@@ -215,7 +215,7 @@ if (result.leveledUp) {
     }
   }
 
-};
+});
 
 // Comando: Ver XP/Level (prefix command)
 client.on('messageCreate', async (message) => {
