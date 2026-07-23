@@ -1,4 +1,10 @@
-const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const {
+  Client,
+  GatewayIntentBits,
+  ActionRowBuilder,
+  StringSelectMenuBuilder,
+  EmbedBuilder
+} = require('discord.js');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
