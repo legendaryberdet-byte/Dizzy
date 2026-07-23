@@ -243,7 +243,31 @@ client.on('messageCreate', async (message) => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/);
     const command = args[0].toLowerCase();
 
-  // Comando: !saldo
+ // Comando: !testlevel
+if (command === 'testlevel') {
+
+  const nivel = parseInt(args[0]) || 1;
+
+  const levelUpMessage = getRandomLevelUpMessage(
+    message.author.id,
+    nivel
+  );
+
+  const levelUpChannel = message.guild.channels.cache.get("1529588347754774648");
+
+  if (levelUpChannel) {
+    levelUpChannel.send({
+      content: levelUpMessage,
+    });
+
+    message.reply("✅ Mensagem de teste enviada!");
+  } else {
+    message.reply("❌ Canal de level up não encontrado.");
+  }
+
+} 
+
+// Comando: !saldo
 if (command === 'saldo') {
   const targetUser = message.mentions.users.first() || message.author;
 
