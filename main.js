@@ -249,42 +249,56 @@ client.on('messageCreate', async (message) => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/);
     const command = args[0].toLowerCase();
 
-// Comando: !claimroles
-if (command === "claimroles") {
 
-  console.log("Comando executado");
+if (command === "roles") {
 
-  const stats = await getUserStats(message.author.id);
-  console.log("Nível:", stats.level);
+    const stats = await getUserStats(message.author.id);
 
-  let cargosRecebidos = 0;
+    const availableRoles = [];
 
-  for (const [level, roleId] of Object.entries(levelRoles)) {
+    for (const [level, roleId] of Object.entries(levelRoles)) {
 
-    console.log("Verificando nível", level);
+        if (stats.level >= Number(level)) {
 
-    if (stats.level >= Number(level)) {
+            const role = message.guild.roles.cache.get(roleId);
 
-      console.log("Pode receber cargo", roleId);
+            if (role) {
+                availableRoles.push({
+                    label: role.name,
+                    value: role.id,
+                    description: `Desbloqueado no nível ${level}`
+                });
+            }
 
-      const role = message.guild.roles.cache.get(roleId);
-
-      console.log("Role encontrada?", !!role);
-
-      if (role && !message.member.roles.cache.has(roleId)) {
-        console.log("Tentando adicionar...");
-        await message.member.roles.add(role);
-        console.log("Adicionou!");
-        cargosRecebidos++;
-      }
+        }
 
     }
-  }
 
-  console.log("Terminou o loop");
+    if (availableRoles.length === 0) {
+        return message.reply("Você ainda não desbloqueou nenhum cargo.");
+    }
 
-  message.reply(`Recebeu ${cargosRecebidos} cargos.`);
+    const embed = new EmbedBuilder()
+        .setColor(0x5865F2)
+        .setTitle("Escolha seu cargo")
+        .setDescription(
+            `Seu nível: **${stats.level}**\n\nEscolha um dos cargos desbloqueados abaixo.`
+        );
+
+    const menu = new StringSelectMenuBuilder()
+        .setCustomId("equip_role")
+        .setPlaceholder("Selecione um cargo...")
+        .addOptions(availableRoles);
+
+    const row = new ActionRowBuilder().addComponents(menu);
+
+    message.reply({
+        embeds: [embed],
+        components: [row]
+    });
+
 }
+
 // Comando: !testlevel
 if (command === 'testlevel') {
 
