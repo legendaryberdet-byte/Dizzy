@@ -939,8 +939,6 @@ client.on("interactionCreate", async interaction => {
 
 });
 
-// Conectar ao Discord
-client.login(process.env.DISCORD_TOKEN);
 
 // Conectar ao Discord
 client.login(process.env.DISCORD_TOKEN);
