@@ -246,39 +246,39 @@ client.on('messageCreate', async (message) => {
 // Comando: !claimroles
 if (command === "claimroles") {
 
-  console.log("Claimroles executado");
+  console.log("Comando executado");
 
   const stats = await getUserStats(message.author.id);
-
-  message.reply(`Seu nível é ${stats.level}`);
+  console.log("Nível:", stats.level);
 
   let cargosRecebidos = 0;
 
   for (const [level, roleId] of Object.entries(levelRoles)) {
 
+    console.log("Verificando nível", level);
+
     if (stats.level >= Number(level)) {
+
+      console.log("Pode receber cargo", roleId);
 
       const role = message.guild.roles.cache.get(roleId);
 
+      console.log("Role encontrada?", !!role);
+
       if (role && !message.member.roles.cache.has(roleId)) {
+        console.log("Tentando adicionar...");
         await message.member.roles.add(role);
+        console.log("Adicionou!");
         cargosRecebidos++;
       }
 
     }
-
   }
 
-  if (cargosRecebidos === 0) {
-    return message.reply("Você já possui todos os cargos correspondentes ao seu nível!");
-  }
+  console.log("Terminou o loop");
 
-  message.reply(
-    `Você recebeu **${cargosRecebidos}** cargo(s) correspondente(s) ao seu nível (**${stats.level}**)!\nUse o comando novamente caso algum cargo seja removido.`
-  );
-
+  message.reply(`Recebeu ${cargosRecebidos} cargos.`);
 }
-
 // Comando: !testlevel
 if (command === 'testlevel') {
 
