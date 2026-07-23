@@ -42,7 +42,10 @@ const levelUpMessages = [
   '{user} atingiu o nível {level}!!! Corram para as colinas!!!',
   '{user} chegou ao nível {level}, nada mal!',
   '{user} caiu no chão e atingiu o nível {level} aprendendo com os próprios erros!',
-  'Eu jurava que o mundo estava acabando, mas quando vi, era só o {user} atingindo o nível {level}',
+  'Eu jurava que o mundo estava acabando, mas quando vi, era só o {user} atingindo o nível {level}', 
+'{user} se conteu e atingiu o nível {level}', 'Impressão minha ou o clima ficou diferente após {user} atingir o nível {level}?', 'Shhh.... não deixe {user} descobrir que ele atingiu o nível {level}', 
+'Qualé {user}, só chegou no nível {level} agora?',
+'مثير للاهتمام، لقد ارتفع مستوى {user} إلى {level}', 
 ];
 
 // Cargos desbloqueados por nível
