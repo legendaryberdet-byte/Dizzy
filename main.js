@@ -93,6 +93,18 @@ async function getUserStats(userId) {
   return user;
 }
 
+// Comando: !saldo
+if (command === 'saldo') {
+  const targetUser = message.mentions.users.first() || message.author;
+
+  const stats = await getUserStats(targetUser.id);
+
+  message.reply({
+    content: `**${targetUser.username}** possui **${stats.dizzles} <:emoji_20:1529517320118993076>**!`
+  });
+}
+
+
 // Adicionar XP
 async function addXp(userId, amount) {
   const user = await getUserStats(userId);
