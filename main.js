@@ -45,6 +45,27 @@ const levelUpMessages = [
   'Eu jurava que o mundo estava acabando, mas quando vi, era só o {user} atingindo o nível {level}',
 ];
 
+// Cargos desbloqueados por nível
+const levelRoles = {
+  1: "ID_DO_CARGO_ROOKIE",
+  5: "ID_DO_CARGO_EXPERIENCED",
+  10: "ID_DO_CARGO_ADDICTED",
+  15: "ID_DO_CARGO_NATURAL",
+  20: "ID_DO_CARGO_BURN_OUT",
+  25: "ID_DO_CARGO_BLAZING",
+  30: "ID_DO_CARGO_OVERSEER",
+  35: "ID_DO_CARGO_KING",
+  40: "ID_DO_CARGO_ANGELICAL",
+  45: "ID_DO_CARGO_GODLIKE",
+  50: "ID_DO_CARGO_ATEMPORAL",
+  60: "ID_DO_CARGO_DIMENSIONAL_TRAVELER",
+  70: "ID_DO_CARGO_DIMENSION_BREAKER",
+  80: "ID_DO_CARGO_RESOLUTE",
+  90: "ID_DO_CARGO_ABSOLUTE",
+  100: "ID_DO_CARGO_IMMEASURABLE",
+  125: "ID_DO_CARGO_TRANSCENDENT"
+};
+
 // Calcular XP necessário para um nível
 function getXpForLevel(level) {
   const baseXp = config.xp.baseXpPerLevel;
