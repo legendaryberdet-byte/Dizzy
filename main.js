@@ -243,10 +243,14 @@ client.on('messageCreate', async (message) => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/);
     const command = args[0].toLowerCase();
 
- // Comando: !claimroles
+// Comando: !claimroles
 if (command === "claimroles") {
 
+  console.log("Claimroles executado");
+
   const stats = await getUserStats(message.author.id);
+
+  message.reply(`Seu nível é ${stats.level}`);
 
   let cargosRecebidos = 0;
 
