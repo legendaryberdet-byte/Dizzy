@@ -214,7 +214,7 @@ if (result.leveledUp) {
       );
     }
   }
-
+}
 });
 
 // Comando: Ver XP/Level (prefix command)
