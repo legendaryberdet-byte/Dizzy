@@ -243,7 +243,39 @@ client.on('messageCreate', async (message) => {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/);
     const command = args[0].toLowerCase();
 
- // Comando: !testlevel
+ // Comando: !claimroles
+if (command === "claimroles") {
+
+  const stats = await getUserStats(message.author.id);
+
+  let cargosRecebidos = 0;
+
+  for (const [level, roleId] of Object.entries(levelRoles)) {
+
+    if (stats.level >= Number(level)) {
+
+      const role = message.guild.roles.cache.get(roleId);
+
+      if (role && !message.member.roles.cache.has(roleId)) {
+        await message.member.roles.add(role);
+        cargosRecebidos++;
+      }
+
+    }
+
+  }
+
+  if (cargosRecebidos === 0) {
+    return message.reply("Você já possui todos os cargos correspondentes ao seu nível!");
+  }
+
+  message.reply(
+    `Você recebeu **${cargosRecebidos}** cargo(s) correspondente(s) ao seu nível (**${stats.level}**)!\nUse o comando novamente caso algum cargo seja removido.`
+  );
+
+}
+
+// Comando: !testlevel
 if (command === 'testlevel') {
 
   const nivel = parseInt(args[0]) || 1;
