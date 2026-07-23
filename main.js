@@ -161,11 +161,13 @@ client.on('messageCreate', async (message) => {
 
 // Se subiu de nível, enviar mensagem no canal de level ups
 if (result.leveledUp) {
+
   const levelUpMessage = getRandomLevelUpMessage(
     message.author.username,
     result.newLevel
   );
 
+  // Enviar mensagem de level up
   const levelUpChannel = message.guild.channels.cache.get("1529588347754774648");
 
   if (levelUpChannel) {
@@ -173,9 +175,25 @@ if (result.leveledUp) {
       content: levelUpMessage,
     });
   }
-}
 
-});
+
+  // Dar cargo quando atingir nível
+  const roleId = levelRoles[result.newLevel];
+
+  if (roleId) {
+
+    const role = message.guild.roles.cache.get(roleId);
+
+    if (role) {
+      await message.member.roles.add(role);
+
+      console.log(
+        `${message.author.username} recebeu o cargo ${role.name}`
+      );
+    }
+  }
+
+}
 
 // Comando: Ver XP/Level (prefix command)
 client.on('messageCreate', async (message) => {
