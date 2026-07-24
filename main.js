@@ -626,35 +626,31 @@ if (interaction.commandName === "leaderboard") {
         });
     }    
 
-    if (!interaction.isStringSelectMenu()) return;
-    if (
-    interaction.customId !== "equip_level_role" &&
-    interaction.customId !== "equip_achievement_role"
-) return;
-
-    try {
+     try {
 
         const roleId = interaction.values[0];
-if (roleId === "none") {
-    return interaction.reply({
-        content: "Você não possui cargos desbloqueados.",
-        ephemeral: true
-    });
-}
 
- const allRoleIds = [
-    ...Object.values(levelRoles),
-    "1530266523674083489" // BARRIL
-];
+        if (roleId === "none") {
+            return interaction.reply({
+                content: "Você não possui cargos desbloqueados.",
+                ephemeral: true
+            });
+        }
 
-for (const id of allRoleIds) {
-    if (interaction.member.roles.cache.has(id)) {
-        await interaction.member.roles.remove(id);
-    }
-}
+        const allRoleIds = [
+            ...Object.values(levelRoles),
+            "1530266523674083489"
+        ];
 
-await interaction.member.roles.add(roleId);
-        interaction.reply({
+        for (const id of allRoleIds) {
+            if (interaction.member.roles.cache.has(id)) {
+                await interaction.member.roles.remove(id);
+            }
+        }
+
+        await interaction.member.roles.add(roleId);
+
+        await interaction.reply({
             content: "Cargo equipado!",
             ephemeral: true
         });
@@ -663,12 +659,13 @@ await interaction.member.roles.add(roleId);
         console.error(err);
 
         if (!interaction.replied) {
-            interaction.reply({
+            await interaction.reply({
                 content: "Ocorreu um erro.",
                 ephemeral: true
             });
         }
     }
+
 }
 
 });
