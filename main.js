@@ -271,6 +271,33 @@ client.on('ready', async () => {
 client.on('messageCreate', async (message) => {
   // Ignorar mensagens do bot e mensagens privadas
   if (message.author.bot || !message.guild) return;
+  
+   // Se passaram mais de 10 segundos, reinicia
+    if (now - stats.barrelStart > 10000) {
+        stats.barrelStart = now;
+        stats.barrelCount = 1;
+    } else {
+        stats.barrelCount++;
+    }
+
+    // Conquista!
+    if (stats.barrelCount >= 3) {
+
+        if (!stats.specialRoles.includes("barrel")) {
+            stats.specialRoles.push("barrel");
+
+            await message.reply(
+                "**CONQUISTA DESBLOQUEADA!**\n\n🛢️ Você desbloqueou o cargo secreto **BARRIL**!\nUse **/roles** para equipá-lo."
+            );
+        }
+
+        // Reinicia a contagem
+        stats.barrelCount = 0;
+        stats.barrelStart = 0;
+    }
+
+    await stats.save();
+}
 
   const userId = message.author.id;
   const stats = await getUserStats(userId);
@@ -374,38 +401,9 @@ if (command === 'testlevel') {
 if (command === 'saldo') {
   const targetUser = message.mentions.users.first() || message.author;
 
-  const stats = await getUserStats(targetUser.id);
+  const stats = await getUserStats(targetUser.id)
+const now = Date.now();
 
-if (message.content.toLowerCase() === "barril") {
-
-    const now = Date.now();
-
-    // Se passaram mais de 10 segundos, reinicia
-    if (now - stats.barrelStart > 10000) {
-        stats.barrelStart = now;
-        stats.barrelCount = 1;
-    } else {
-        stats.barrelCount++;
-    }
-
-    // Conquista!
-    if (stats.barrelCount >= 3) {
-
-        if (!stats.specialRoles.includes("barrel")) {
-            stats.specialRoles.push("barrel");
-
-            await message.reply(
-                "**CONQUISTA DESBLOQUEADA!**\n\n🛢️ Você desbloqueou o cargo secreto **BARRIL**!\nUse **/roles** para equipá-lo."
-            );
-        }
-
-        // Reinicia a contagem
-        stats.barrelCount = 0;
-        stats.barrelStart = 0;
-    }
-
-    await stats.save();
-}
 
   message.reply({
     content: `**${targetUser.username}** possui **${stats.dizzles} <:emoji_20:1529517320118993076>**!`
@@ -526,6 +524,18 @@ const achievementMenu = new StringSelectMenuBuilder()
 
   }
 };
+
+const row1 = new ActionRowBuilder()
+    .addComponents(progressMenu);
+
+const row2 = new ActionRowBuilder()
+    .addComponents(achievementMenu);
+
+await interaction.reply({
+    embeds: [embed],
+    components: [row1, row2],
+    ephemeral: true
+});
 
 client.on("interactionCreate", async interaction => {
 
