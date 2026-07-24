@@ -442,40 +442,6 @@ const now = Date.now();
 });
 
 
-const {
-  SlashCommandBuilder
-} = require('discord.js');
-    .setDescription('Escolha um cargo desbloqueado'),
-
-  async execute(interaction) {
-
-    const stats = await getUserStats(interaction.user.id);
-
-    const availableRoles = [];
-
-    for (const [level, roleId] of Object.entries(levelRoles)) {
-
-      if (stats.level >= Number(level)) {
-
-        const role = interaction.guild.roles.cache.get(roleId);
-
-        if (role) {
-          availableRoles.push({
-            label: role.name,
-            value: role.id,
-            description: `Desbloqueado no nível ${level}`
-          });
-        }
-      }
-    }
-
-
-    if (availableRoles.length === 0) {
-      return interaction.reply({
-        content: "Você ainda não desbloqueou nenhum cargo.",
-        ephemeral: true
-      });
-    }
 
 
     const embed = new EmbedBuilder()
