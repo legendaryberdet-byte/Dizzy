@@ -179,9 +179,7 @@ client.on('ready', async () => {
           .setName("roles")
           .setDescription("Escolha um cargo desbloqueado")
           .toJSON()
-]
-      
-    body: [
+
     new SlashCommandBuilder()
     .setName("profile")
     .setDescription("Veja seu perfil ou o de          outro usuário")
