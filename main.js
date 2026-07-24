@@ -528,7 +528,7 @@ const rest = new REST({ version: '10' })
   } catch (error) {
     console.error(error);
   }
-}());
+}));
 
 // Conectar ao Discord
 client.login(process.env.DISCORD_TOKEN);
