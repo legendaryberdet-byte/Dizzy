@@ -299,7 +299,7 @@ client.on('messageCreate', async (message) => {
         stats.barrelStart = 0;
     }
 
-    stats.save();
+    await stats.save();
 });
 
   // Sistema de Dizzles 🪙
@@ -307,7 +307,7 @@ client.on('messageCreate', async (message) => {
     stats.dizzles += 1;
     stats.lastDizzleTime = now;
 
-     stats.save();
+    await stats.save();
   }
   
   
@@ -322,7 +322,7 @@ client.on('messageCreate', async (message) => {
       config.xp.minXpPerMessage
   );
 
-  const result = addXp(userId, xpGained);
+  const result = await addXp(userId, xpGained);
   stats.messages += 1;
   stats.lastMessageTime = now;
   stats.save();
