@@ -667,6 +667,7 @@ if (interaction.commandName === "leaderboard") {
     }
 
 }
+}
 
 });
 
