@@ -353,7 +353,7 @@ if (result.leveledUp) {
     const role = message.guild.roles.cache.get(roleId);
 
     if (role) {
-      await message.member.roles.add(role);
+      message.member.roles.add(role);
 
       console.log(
         `${message.author.username} recebeu o cargo ${role.name}`
