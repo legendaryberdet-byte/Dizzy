@@ -320,66 +320,6 @@ if (command === 'saldo') {
   });
 }  
 
-// Comando: !pf (profile)
-    if (command === 'pf') {
-      const targetUser = message.mentions.users.first() || message.author;
-      const stats = await getUserStats(targetUser.id);
-      const rank = await getRankPosition(targetUser.id);
-
-      const currentLevelXp = getXpForLevel(stats.level);
-      const nextLevelXp = getXpForLevel(stats.level + 1);
-      const xpProgress = stats.xp - currentLevelXp;
-      const xpNeeded = nextLevelXp - currentLevelXp;
-      const xpRemaining = xpNeeded - xpProgress;
-      const percentage = Math.round((xpProgress / xpNeeded) * 100);
-
-      message.reply({
-        embeds: [
-          {
-            color: 0x5865f2,
-            author: {
-              name: targetUser.username,
-              icon_url: targetUser.displayAvatarURL(),
-            },
-            thumbnail: {
-              url: targetUser.displayAvatarURL(),
-            },
-            fields: [
-              {
-                name: 'Posição',
-                value: `#${rank}`,
-                inline: true,
-              },
-              {
-                name: 'Nível',
-                value: `${stats.level}`,
-                inline: true,
-              },
-              {
-                name: 'Mensagens',
-                value: `${stats.messages}`,
-                inline: true,
-              },
-              {
-                name: 'XP Total',
-                value: `${stats.xp}`,
-                inline: false,
-              },
-              {
-                name: 'Progresso',
-                value: `${createProgressBar(xpProgress, xpNeeded)} ${percentage}%\n${xpProgress}/${xpNeeded} XP`,
-                inline: false,
-              },
-              {
-                name: 'XP Faltando',
-                value: `${xpRemaining} XP pro próximo nível`,
-                inline: false,
-              },
-            ],
-          },
-        ],
-      });
-    }
 
     // Comando: !addxp (SOMENTE DONO)
     if (command === 'addxp') {
