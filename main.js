@@ -271,8 +271,11 @@ client.on('ready', async () => {
 client.on('messageCreate', async (message) => {
   // Ignorar mensagens do bot e mensagens privadas
   if (message.author.bot || !message.guild) return;
-  
-   // Se passaram mais de 10 segundos, reinicia
+  const userId = message.author.id;
+  const stats = await getUserStats(userId);
+  const now = Date.now();
+   
+// Se passaram mais de 10 segundos, reinicia
     if (now - stats.barrelStart > 10000) {
         stats.barrelStart = now;
         stats.barrelCount = 1;
@@ -298,10 +301,6 @@ client.on('messageCreate', async (message) => {
 
     await stats.save();
 }
-
-  const userId = message.author.id;
-  const stats = await getUserStats(userId);
-  const now = Date.now();
 
   // Sistema de Dizzles 🪙
   if (now - stats.lastDizzleTime >= 60000) {
@@ -523,7 +522,7 @@ const achievementMenu = new StringSelectMenuBuilder()
     );
 
   }
-};
+
 
 const row1 = new ActionRowBuilder()
     .addComponents(progressMenu);
@@ -536,6 +535,9 @@ await interaction.reply({
     components: [row1, row2],
     ephemeral: true
 });
+
+
+}; 
 
 client.on("interactionCreate", async interaction => {
 
