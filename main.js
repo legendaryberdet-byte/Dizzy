@@ -409,7 +409,6 @@ if (command === 'saldo') {
 
 const {
   SlashCommandBuilder,
-  EmbedBuilder,
   ActionRowBuilder,
   StringSelectMenuBuilder
 } = require('discord.js');
