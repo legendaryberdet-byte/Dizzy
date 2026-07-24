@@ -299,7 +299,7 @@ client.on('messageCreate', async (message) => {
         stats.barrelStart = 0;
     }
 
-    await stats.save();
+    stats.save();
 });
 
   // Sistema de Dizzles 🪙
