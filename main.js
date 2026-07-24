@@ -163,7 +163,7 @@ async function getUserStats(userId) {
 
 
 // Adicionar XP
-async function addXp(userId, amount) {
+async function await addXp(userId, amount) {
   const user = await getUserStats(userId);
   user.xp += amount;
 
@@ -640,7 +640,7 @@ if (interaction.commandName === "leaderboard") {
         });
     }     
 
- if (interaction.commandName === "roles") {
+  {
 
             const stats = await getUserStats(interaction.user.id);
 
