@@ -522,7 +522,7 @@ const rest = new REST({ version: '10' })
         process.env.GUILD_ID
       ),
       { body: [] }
-    );
+    ));
 
     console.log("✅ Comandos slash removidos!");
   } catch (error) {
