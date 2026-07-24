@@ -300,7 +300,6 @@ client.on('messageCreate', async (message) => {
     }
 
     await stats.save();
-});
 
   // Sistema de Dizzles 🪙
   if (now - stats.lastDizzleTime >= 60000) {
