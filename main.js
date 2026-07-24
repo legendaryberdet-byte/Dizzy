@@ -171,13 +171,23 @@ function createProgressBar(current, max, size = 10) {
 
 
 // Pegar mensagem de level up aleatória
-function getRandomLevelUpMessage(userId, level) {
-  const randomMessage = levelUpMessages[Math.floor(Math.random() * levelUpMessages.length)];
-  return randomMessage
-    .replace('{user}', `<@${userId}>`)
-    .replace('{level}', `**${level}**`);
-}
+function getRandomLevelUpMessage(userId, level)
+{ 
+  const unlockedMessages = [];
 
+  for (const group of levelUpMessages) {
+    if (level >= group.minLevel) {
+      unlockedMessages.push(...group.messages);
+    }
+  }
+
+  const randomMessage =
+    unlockedMessages[Math.floor(Math.random() * unlockedMessages.length)];
+
+  return randomMessage
+    .replace("{user}", `<@${userId}>`)
+    .replace("{level}", `**${level}**`);
+}
 
 // Event: Bot conectado
 client.on('ready', async () => {
