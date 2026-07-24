@@ -163,7 +163,7 @@ async function getUserStats(userId) {
 
 
 // Adicionar XP
-async function await addXp(userId, amount) {
+async function addXp(userId, amount) {
   const user = await getUserStats(userId);
   user.xp += amount;
 
@@ -441,6 +441,12 @@ const now = Date.now();
 
 });
 
+
+client.on("interactionCreate", async interaction => {
+
+    if (interaction.isChatInputCommand()) {
+
+
 if (interaction.commandName === "roles") {
 
     const stats = await getUserStats(interaction.user.id);
@@ -490,15 +496,13 @@ const achievementMenu = new StringSelectMenuBuilder()
     .setCustomId("equip_achievement_role")
     .setPlaceholder("Selecionar cargos de conquistas")
     .addOptions(
-        achievementRoles.length > 0
-            ? achievementRoles
-            : [
-                {
-                    label: "Nenhuma conquista desbloqueada",
-                    value: "none",
-                    description: "Você ainda não possui cargos de conquista"
-                }
-            ]
+    achievementRoles.length > 0
+    ? achievementRoles
+    : [{
+        label: "Nenhum cargo desbloqueado",
+        value: "none",
+        description: "Você ainda não possui cargos"
+    }]
     );
 
    const row1 = new ActionRowBuilder()
@@ -514,11 +518,7 @@ await interaction.reply({
 });
 
 
-}; 
-
-client.on("interactionCreate", async interaction => {
-
-    if (interaction.isChatInputCommand()) {
+};
 
 if (interaction.commandName === "leaderboard") {
 
@@ -624,43 +624,7 @@ if (interaction.commandName === "leaderboard") {
                 },
             ],
         });
-    }     
-
-  {
-
-            const stats = await getUserStats(interaction.user.id);
-
-            const availableRoles = [];
-
-            for (const [level, roleId] of Object.entries(levelRoles)) {
-
-                if (stats.level >= Number(level)) {
-
-                    const role = interaction.guild.roles.cache.get(roleId);
-
-                    if (role) {
-                        availableRoles.push({
-                            label: role.name,
-                            value: role.id,
-                            description: `Desbloqueado no nível ${level}`
-                        });
-                    }
-                }
-            }
-
-            if (availableRoles.length === 0) {
-                return interaction.reply({
-                    content: "Você ainda não desbloqueou nenhum cargo.",
-                    ephemeral: true
-                });
-            }
-
-            const embed = new EmbedBuilder()
-                .setColor(0x5865F2)
-                .setTitle("Escolha seu cargo")
-                .setDescription(
-                    `Seu nível: **${stats.level}**\n\nEscolha um dos cargos abaixo.`
-               );
+    }    
 
     if (!interaction.isStringSelectMenu()) return;
     if (
@@ -671,15 +635,25 @@ if (interaction.commandName === "leaderboard") {
     try {
 
         const roleId = interaction.values[0];
+if (roleId === "none") {
+    return interaction.reply({
+        content: "Você não possui cargos desbloqueados.",
+        ephemeral: true
+    });
+}
 
-        for (const id of Object.values(levelRoles)) {
-            if (interaction.member.roles.cache.has(id)) {
-                 interaction.member.roles.remove(id);
-            }
-        }
+ const allRoleIds = [
+    ...Object.values(levelRoles),
+    "1530266523674083489" // BARRIL
+];
 
-         interaction.member.roles.add(roleId);
+for (const id of allRoleIds) {
+    if (interaction.member.roles.cache.has(id)) {
+        await interaction.member.roles.remove(id);
+    }
+}
 
+await interaction.member.roles.add(roleId);
         interaction.reply({
             content: "Cargo equipado!",
             ephemeral: true
@@ -695,8 +669,6 @@ if (interaction.commandName === "leaderboard") {
             });
         }
     }
-
-;
 });
 
 // Conectar ao Discord
