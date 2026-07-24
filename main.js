@@ -544,11 +544,11 @@ client.on("interactionCreate", async interaction => {
 
         for (const id of Object.values(levelRoles)) {
             if (interaction.member.roles.cache.has(id)) {
-                await interaction.member.roles.remove(id);
+                 interaction.member.roles.remove(id);
             }
         }
 
-        await interaction.member.roles.add(roleId);
+         interaction.member.roles.add(roleId);
 
         interaction.reply({
             content: "Cargo equipado!",
@@ -559,7 +559,7 @@ client.on("interactionCreate", async interaction => {
         console.error(err);
 
         if (!interaction.replied) {
-            await interaction.reply({
+            interaction.reply({
                 content: "Ocorreu um erro.",
                 ephemeral: true
             });
