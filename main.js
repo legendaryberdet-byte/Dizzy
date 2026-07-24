@@ -431,7 +431,7 @@ const now = Date.now();
         return;
       }
 
-      const result = await addXp(targetUser.id, xpAmount);
+      const result = addXp(targetUser.id, xpAmount);
       message.reply({
         content: `✅ ${xpAmount} XP adicionado para **${targetUser.username}**! Nível atual: **${result.newLevel}**`,
         ephemeral: false,
