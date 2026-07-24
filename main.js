@@ -162,6 +162,29 @@ function getRandomLevelUpMessage(userId, level) {
 client.on('ready', async () => {
   console.log(`✅ Bot conectado como ${client.user.tag}`);
   
+  // Registrar /roles
+  const { REST, Routes, SlashCommandBuilder } = require("discord.js");
+
+  const rest = new REST({ version: "10" })
+    .setToken(process.env.DISCORD_TOKEN);
+
+  await rest.put(
+    Routes.applicationGuildCommands(
+      process.env.CLIENT_ID,
+      process.env.GUILD_ID
+    ),
+    {
+      body: [
+        new SlashCommandBuilder()
+          .setName("roles")
+          .setDescription("Escolha um cargo desbloqueado")
+          .toJSON()
+      ]
+    }
+  );
+
+  console.log("✅ /roles registrado!");
+
   // Conectar ao MongoDB
   try {
     await mongoose.connect(process.env.MONGODB_URI);
