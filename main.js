@@ -182,7 +182,7 @@ client.on('ready', async () => {
 
     new SlashCommandBuilder()
     .setName("profile")
-    .setDescription("Veja seu perfil ou o de          outro usuário")
+    .setDescription("Veja seu perfil ou o de outro usuário")
     .addUserOption(option =>
       option
         .setName("usuario")
