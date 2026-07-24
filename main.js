@@ -307,7 +307,7 @@ client.on('messageCreate', async (message) => {
     stats.dizzles += 1;
     stats.lastDizzleTime = now;
 
-    await stats.save();
+     stats.save();
   }
   
   
