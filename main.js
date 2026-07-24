@@ -445,10 +445,6 @@ const now = Date.now();
 const {
   SlashCommandBuilder
 } = require('discord.js');
-
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('roles')
     .setDescription('Escolha um cargo desbloqueado'),
 
   async execute(interaction) {
