@@ -295,7 +295,6 @@ if (command === "roles") {
     message.reply({
         embeds: [embed],
         components: [row]
-        ephemeral: true
  });
 
 }
