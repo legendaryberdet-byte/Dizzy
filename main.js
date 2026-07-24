@@ -179,7 +179,19 @@ client.on('ready', async () => {
           .setName("roles")
           .setDescription("Escolha um cargo desbloqueado")
           .toJSON()
-      ]
+      
+     new SlashCommandBuilder()
+    .setName("profile")
+    .setDescription("Veja seu perfil ou o de          outro usuário")
+    .addUserOption(option =>
+      option
+        .setName("usuario")
+        .setDescription("Usuário que deseja visualizar")
+        .setRequired(false)
+    )
+    .toJSON()
+
+   ]
     }
   );
 
