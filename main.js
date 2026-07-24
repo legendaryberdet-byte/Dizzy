@@ -107,33 +107,6 @@ const levelUpMessages = [
 ];
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-];
-
 // Cargos desbloqueados por nível
 const levelRoles = {
   1: "1496534824947552360",
