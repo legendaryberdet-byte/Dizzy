@@ -441,7 +441,27 @@ const now = Date.now();
 
 });
 
+if (interaction.commandName === "roles") {
 
+    const stats = await getUserStats(interaction.user.id);
+
+    const availableRoles = [];
+
+    for (const [level, roleId] of Object.entries(levelRoles)) {
+
+        if (stats.level >= Number(level)) {
+
+            const role = interaction.guild.roles.cache.get(roleId);
+
+            if (role) {
+                availableRoles.push({
+                    label: role.name,
+                    value: role.id,
+                    description: `Desbloqueado no nível ${level}`
+                });
+            }
+        }
+    }
 
 
     const embed = new EmbedBuilder()
