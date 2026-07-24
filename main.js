@@ -566,7 +566,7 @@ client.on("interactionCreate", async interaction => {
         }
     }
 
-);
+;
 
 
 // Conectar ao Discord
