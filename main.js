@@ -519,8 +519,6 @@ const achievementMenu = new StringSelectMenuBuilder()
             ]
     );
 
-  }
-
    const row1 = new ActionRowBuilder()
     .addComponents(progressMenu);
 
