@@ -518,17 +518,17 @@ const rest = new REST({ version: '10' })
   try {
     await rest.put(
       Routes.applicationGuildCommands(
-        process.env.1529306624383254558,
+        process.env.CLIENT_ID,
         process.env.GUILD_ID
       ),
       { body: [] }
-    ));
+    );
 
     console.log("✅ Comandos slash removidos!");
   } catch (error) {
     console.error(error);
   }
-}));
+}());
 
 // Conectar ao Discord
 client.login(process.env.DISCORD_TOKEN);
