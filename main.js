@@ -513,7 +513,70 @@ client.on("interactionCreate", async interaction => {
 
     if (interaction.isChatInputCommand()) {
 
-        if (interaction.commandName === "roles") {
+    if (interaction.commandName === "profile") {
+
+        const targetUser =
+            interaction.options.getUser("usuario") || interaction.user;
+
+        const stats = await getUserStats(targetUser.id);
+        const rank = await getRankPosition(targetUser.id);
+
+        const currentLevelXp = getXpForLevel(stats.level);
+        const nextLevelXp = getXpForLevel(stats.level + 1);
+        const xpProgress = stats.xp - currentLevelXp;
+        const xpNeeded = nextLevelXp - currentLevelXp;
+        const xpRemaining = xpNeeded - xpProgress;
+        const percentage = Math.round((xpProgress / xpNeeded) * 100);
+
+        return interaction.reply({
+            embeds: [
+                {
+                    color: 0x5865f2,
+                    author: {
+                        name: targetUser.username,
+                        icon_url: targetUser.displayAvatarURL(),
+                    },
+                    thumbnail: {
+                        url: targetUser.displayAvatarURL(),
+                    },
+                    fields: [
+                        {
+                            name: "Posição",
+                            value: `#${rank}`,
+                            inline: true,
+                        },
+                        {
+                            name: "Nível",
+                            value: `${stats.level}`,
+                            inline: true,
+                        },
+                        {
+                            name: "Mensagens",
+                            value: `${stats.messages}`,
+                            inline: true,
+                        },
+                        {
+                            name: "XP Total",
+                            value: `${stats.xp}`,
+                            inline: false,
+                        },
+                        {
+                            name: "Progresso",
+                            value: `${createProgressBar(xpProgress, xpNeeded)} ${percentage}%\n${xpProgress}/${xpNeeded} XP`,
+                            inline: false,
+                        },
+                        {
+                            name: "XP Faltando",
+                            value: `${xpRemaining} XP pro próximo nível`,
+                            inline: false,
+                        },
+                    ],
+                },
+            ],
+        });
+    }     
+
+ if (interaction.commandName === "roles") {
 
             const stats = await getUserStats(interaction.user.id);
 
