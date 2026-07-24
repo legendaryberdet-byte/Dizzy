@@ -411,8 +411,6 @@ const {
   SlashCommandBuilder
 } = require('discord.js');
 
-const levelRoles = require('../levelRoles');
-
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('roles')
