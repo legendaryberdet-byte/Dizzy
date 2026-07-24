@@ -674,24 +674,7 @@ if (interaction.commandName === "leaderboard") {
                 .setTitle("Escolha seu cargo")
                 .setDescription(
                     `Seu nível: **${stats.level}**\n\nEscolha um dos cargos abaixo.`
-                );
-
-            const menu = new StringSelectMenuBuilder()
-                .setCustomId("equip_role")
-                .setPlaceholder("Selecione um cargo...")
-                .addOptions(availableRoles);
-
-            const row = new ActionRowBuilder()
-                .addComponents(menu);
-
-            return interaction.reply({
-                embeds: [embed],
-                components: [row],
-                ephemeral: true
-            });
-        }
-    }
-
+               );
 
     if (!interaction.isStringSelectMenu()) return;
     if (
