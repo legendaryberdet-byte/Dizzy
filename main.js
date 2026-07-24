@@ -534,10 +534,6 @@ client.on("interactionCreate", async interaction => {
     if (!interaction.isStringSelectMenu()) return;
     if (interaction.customId !== "equip_role") return;
 
-    // seu código de equipar cargo continua aqui
-});
-    if (interaction.customId !== "equip_role") return;
-
     try {
 
         const roleId = interaction.values[0];
@@ -567,6 +563,7 @@ client.on("interactionCreate", async interaction => {
     }
 
 ;
+});
 
 
 // Conectar ao Discord
