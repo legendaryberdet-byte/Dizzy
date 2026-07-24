@@ -40,25 +40,71 @@ const User = mongoose.model('User', userSchema);
 
 // Mensagens de level up variadas
 const levelUpMessages = [
-  '{user} atingiu o nível {level}, parabéns!',
-  'Temam todos, {user} acaba de atingir o nível {level}.',
-  'O nível {level} parecia ser inalcançável, porém {user} provou o contrário.',
-  '{user} falou algo e sem querer atingiu o nível {level}!',
-  'O nível {level} combina com {user}.',
-  '{user} atingiu o nível {level}!!! Corram para as colinas!!!',
-  '{user} chegou ao nível {level}, nada mal!',
-  '{user} caiu no chão e atingiu o nível {level} aprendendo com os próprios erros!',
-  'Eu jurava que o mundo estava acabando, mas quando vi, era só o {user} atingindo o nível {level}.', 
-'{user} não se conteu e atingiu o nível {level}.',
- 'Impressão minha ou o clima ficou diferente após {user} atingir o nível {level}?',
- 'Shhh.... não deixe {user} descobrir que ele atingiu o nível {level}', 
-'Qualé {user}, só chegou no nível {level} agora?',
-'مثير للاهتمام، لقد ارتفع مستوى {user} إلى {level}', 
-'{user} atingiu o nível {level} mas ainda tem um grande caminho a percorrer!',
-'{level} níveis atingidos... {user} é uma máquina!!!',
-'{user} 👶🏻👶🏻👶🏻 atingiu 🌟🌟🌟 o 😱😱😱 nível 👀👀👀 {level} 🔥🔥🔥',
-'Sinto que estou ficando pra trás, {user} já está no nível {level}...',
+  {
+    minLevel: 1,
+    messages: [
+      "{user} atingiu o nível {level}, parabéns!",
+      "Temam todos, {user} acaba de atingir o nível {level}.",
+      "O nível {level} parecia ser inalcançável, porém {user} provou o contrário.",
+      "{user} falou algo e sem querer atingiu o nível {level}!",
+      "O nível {level} combina com {user}.",
+      "{user} atingiu o nível {level}!!! Corram para as colinas!!!",
+      "{user} chegou ao nível {level}, nada mal!",
+      "{user} caiu no chão e atingiu o nível {level} aprendendo com os próprios erros!",
+      "Eu jurava que o mundo estava acabando, mas quando vi, era só o {user} atingindo o nível {level}.",
+      "{user} não se conteve e atingiu o nível {level}.",
+      "Impressão minha ou o clima ficou diferente após {user} atingir o nível {level}?",
+      "Shhh... não deixe {user} descobrir que ele atingiu o nível {level}.",
+      "Qualé {user}, só chegou no nível {level} agora?",
+      "مثير للاهتمام، لقد ارتفع مستوى {user} إلى {level}",
+      "{user} atingiu o nível {level}, mas ainda tem um grande caminho a percorrer!",
+      "{level} níveis atingidos... {user} é uma máquina!!!",
+      "{user} 👶🏻👶🏻👶🏻 atingiu 🌟🌟🌟 o 😱😱😱 nível 👀👀👀 {level} 🔥🔥🔥"
+    ]
+  },
 
+  {
+    minLevel: 15,
+    messages: [
+      "Sinto que estou ficando pra trás... {user} já está no nível {level}.",
+      "{user} desbloqueou o nível {level} para se estabelecer!",
+      "Já pode parar de upar, {user}. Nível {level} já tá bom.",
+      "Tô de olho em você em {user}, nível {level}.",
+      "O nível {level} são os verdadeiros amigos que fazemos pelo caminho, {user}!",
+      "Tá ficando assustador ver {user} subir tão rápido assim, dá pra acreditar que ele já está no nível {level}?"
+    ]
+  },
+
+  {
+    minLevel: 30,
+    messages: [
+      "{user} deve estar tremendo após saber que chegou ao nível {level}.",
+      "Nível {level}? Acho melhor alguém verificar se {user} dorme.",
+      "Caramba, {user}, nunca vi alguém chegar tão longe como no nível {level}!",
+      "{user}? Conhece a palavra GRAMA? Ou você só pensou em chegar no nível {level} logo?",
+      "Até onde {user} pretende chegar? Ele já está no {level}..."
+    ]
+  },
+
+  {
+    minLevel: 50,
+    messages: [
+      "UAU! {user} chegou ao nível {level}!",
+      "{user} = nível {level}",
+      "{user} não pensa em desistir! Continue assim, você atingiu o nível {level}!!!",
+      "{user} passou por tanta coisa, mais de 49 níveis... você tem meu respeito por estar no nível {level} :)"
+    ]
+  },
+
+  {
+    minLevel: 100,
+    messages: [
+      "{user} merece respeito após passar do nível 99, ele está atualmente no nível {level}!",
+      "{user} merece um troféu após chegar tão longe e atingir o nível {level}!",
+      "Desde que {user} atingiu o nível {level}, ele morde!!"
+    ]
+  }
+];
 
 
 
