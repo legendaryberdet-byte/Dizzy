@@ -325,7 +325,7 @@ client.on('messageCreate', async (message) => {
   const result = addXp(userId, xpGained);
   stats.messages += 1;
   stats.lastMessageTime = now;
-  await stats.save();
+  stats.save();
 
 // Se subiu de nível, enviar mensagem no canal de level ups
 if (result.leveledUp) {
