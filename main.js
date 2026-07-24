@@ -523,10 +523,10 @@ const achievementMenu = new StringSelectMenuBuilder()
   }
 
 
-   row1 = new ActionRowBuilder()
+   const row1 = new ActionRowBuilder()
     .addComponents(progressMenu);
 
-   row2 = new ActionRowBuilder()
+   const row2 = new ActionRowBuilder()
     .addComponents(achievementMenu);
 
 await interaction.reply({
