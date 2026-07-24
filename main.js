@@ -248,56 +248,7 @@ client.on('messageCreate', async (message) => {
   if (message.content.startsWith(config.prefix)) {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/);
     const command = args[0].toLowerCase();
-
-
-if (command === "roles") {
-
-    const stats = await getUserStats(message.author.id);
-
-    const availableRoles = [];
-
-    for (const [level, roleId] of Object.entries(levelRoles)) {
-
-        if (stats.level >= Number(level)) {
-
-            const role = message.guild.roles.cache.get(roleId);
-
-            if (role) {
-                availableRoles.push({
-                    label: role.name,
-                    value: role.id,
-                    description: `Desbloqueado no nível ${level}`
-                });
-            }
-
-        }
-
-    }
-
-    if (availableRoles.length === 0) {
-        return message.reply("Você ainda não desbloqueou nenhum cargo.");
-    }
-
-    const embed = new EmbedBuilder()
-        .setColor(0x5865F2)
-        .setTitle("Escolha seu cargo")
-        .setDescription(
-            `Seu nível: **${stats.level}**\n\nEscolha um dos cargos desbloqueados abaixo.`
-        );
-
-    const menu = new StringSelectMenuBuilder()
-        .setCustomId("equip_role")
-        .setPlaceholder("Selecione um cargo...")
-        .addOptions(availableRoles);
-
-    const row = new ActionRowBuilder().addComponents(menu);
-
-    message.reply({
-        embeds: [embed],
-        components: [row]
- });
-
-}
+ 
 
 // Comando: !testlevel
 if (command === 'testlevel') {
@@ -455,6 +406,78 @@ if (command === 'saldo') {
     }
   }
 });
+
+const {
+  SlashCommandBuilder,
+  EmbedBuilder,
+  ActionRowBuilder,
+  StringSelectMenuBuilder
+} = require('discord.js');
+
+const levelRoles = require('../levelRoles');
+
+module.exports = {
+  data: new SlashCommandBuilder()
+    .setName('roles')
+    .setDescription('Escolha um cargo desbloqueado'),
+
+  async execute(interaction) {
+
+    const stats = await getUserStats(interaction.user.id);
+
+    const availableRoles = [];
+
+    for (const [level, roleId] of Object.entries(levelRoles)) {
+
+      if (stats.level >= Number(level)) {
+
+        const role = interaction.guild.roles.cache.get(roleId);
+
+        if (role) {
+          availableRoles.push({
+            label: role.name,
+            value: role.id,
+            description: `Desbloqueado no nível ${level}`
+          });
+        }
+      }
+    }
+
+
+    if (availableRoles.length === 0) {
+      return interaction.reply({
+        content: "Você ainda não desbloqueou nenhum cargo.",
+        ephemeral: true
+      });
+    }
+
+
+    const embed = new EmbedBuilder()
+      .setColor(0x5865F2)
+      .setTitle("Escolha seu cargo")
+      .setDescription(
+        `Seu nível: **${stats.level}**\n\nEscolha um dos cargos abaixo.`
+      );
+
+
+    const menu = new StringSelectMenuBuilder()
+      .setCustomId("equip_role")
+      .setPlaceholder("Selecione um cargo...")
+      .addOptions(availableRoles);
+
+
+    const row = new ActionRowBuilder()
+      .addComponents(menu);
+
+
+    await interaction.reply({
+      embeds: [embed],
+      components: [row],
+      ephemeral: true
+    });
+
+  }
+};
 
 client.on("interactionCreate", async interaction => {
 
