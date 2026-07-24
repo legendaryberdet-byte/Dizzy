@@ -322,7 +322,7 @@ client.on('messageCreate', async (message) => {
       config.xp.minXpPerMessage
   );
 
-  const result = await addXp(userId, xpGained);
+  const result = addXp(userId, xpGained);
   stats.messages += 1;
   stats.lastMessageTime = now;
   await stats.save();
