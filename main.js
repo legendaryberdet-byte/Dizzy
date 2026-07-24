@@ -669,7 +669,7 @@ await interaction.member.roles.add(roleId);
             });
         }
     }
-};
+});
 
 // Conectar ao Discord
 client.login(process.env.DISCORD_TOKEN);
