@@ -523,7 +523,7 @@ const achievementMenu = new StringSelectMenuBuilder()
   }
 
 
-
+   row1 = new
     addComponents(progressMenu);
 
 
