@@ -518,7 +518,7 @@ const rest = new REST({ version: '10' })
   try {
     await rest.put(
       Routes.applicationGuildCommands(
-        process.env.CLIENT_ID,
+        process.env.1529306624383254558,
         process.env.GUILD_ID
       ),
       { body: [] }
