@@ -352,7 +352,12 @@ if (command === 'saldo') {
         content: `✅ ${xpAmount} XP adicionado para **${targetUser.username}**! Nível atual: **${result.newLevel}**`,
         ephemeral: false,
       });
-    };
+}
+
+}
+
+
+});
 
 
 const {
