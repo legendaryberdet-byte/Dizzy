@@ -408,9 +408,7 @@ if (command === 'saldo') {
 });
 
 const {
-  SlashCommandBuilder,
-  ActionRowBuilder,
-  StringSelectMenuBuilder
+  SlashCommandBuilder
 } = require('discord.js');
 
 const levelRoles = require('../levelRoles');
