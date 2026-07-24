@@ -550,7 +550,7 @@ client.on("interactionCreate", async interaction => {
 
         await interaction.member.roles.add(roleId);
 
-        await interaction.reply({
+        interaction.reply({
             content: "Cargo equipado!",
             ephemeral: true
         });
