@@ -421,7 +421,7 @@ if (command === 'saldo') {
             title: '🏆 Leaderboard de XP',
             description: leaderboardText.join('\n'),
             footer: {
-              text: 'Use !pf para ver seus stats!',
+              text: 'Use /pf para ver seus stats!',
             },
           },
         ],
