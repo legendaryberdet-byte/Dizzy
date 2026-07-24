@@ -476,7 +476,66 @@ module.exports = {
 
 client.on("interactionCreate", async interaction => {
 
+    if (interaction.isChatInputCommand()) {
+
+        if (interaction.commandName === "roles") {
+
+            const stats = await getUserStats(interaction.user.id);
+
+            const availableRoles = [];
+
+            for (const [level, roleId] of Object.entries(levelRoles)) {
+
+                if (stats.level >= Number(level)) {
+
+                    const role = interaction.guild.roles.cache.get(roleId);
+
+                    if (role) {
+                        availableRoles.push({
+                            label: role.name,
+                            value: role.id,
+                            description: `Desbloqueado no nível ${level}`
+                        });
+                    }
+                }
+            }
+
+            if (availableRoles.length === 0) {
+                return interaction.reply({
+                    content: "Você ainda não desbloqueou nenhum cargo.",
+                    ephemeral: true
+                });
+            }
+
+            const embed = new EmbedBuilder()
+                .setColor(0x5865F2)
+                .setTitle("Escolha seu cargo")
+                .setDescription(
+                    `Seu nível: **${stats.level}**\n\nEscolha um dos cargos abaixo.`
+                );
+
+            const menu = new StringSelectMenuBuilder()
+                .setCustomId("equip_role")
+                .setPlaceholder("Selecione um cargo...")
+                .addOptions(availableRoles);
+
+            const row = new ActionRowBuilder()
+                .addComponents(menu);
+
+            return interaction.reply({
+                embeds: [embed],
+                components: [row],
+                ephemeral: true
+            });
+        }
+    }
+
+
     if (!interaction.isStringSelectMenu()) return;
+    if (interaction.customId !== "equip_role") return;
+
+    // seu código de equipar cargo continua aqui
+});
     if (interaction.customId !== "equip_role") return;
 
     try {
