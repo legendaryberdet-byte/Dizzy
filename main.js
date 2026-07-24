@@ -626,6 +626,13 @@ if (interaction.commandName === "leaderboard") {
         });
     }    
 
+if (!interaction.isStringSelectMenu()) return;
+
+if (
+    interaction.customId !== "equip_level_role" &&
+    interaction.customId !== "equip_achievement_role"
+) return;
+
      try {
 
         const roleId = interaction.values[0];
