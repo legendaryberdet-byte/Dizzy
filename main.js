@@ -26,8 +26,14 @@ const userSchema = new mongoose.Schema({
   xp: { type: Number, default: 0 },
   level: { type: Number, default: 1 },
   messages: { type: Number, default: 0 },
+  barrelCount: { type: Number, default: 0 },
+barrelStart: { type: Number, default: 0 },
+  specialRoles: {
+    type: [String],
+    default: []
+},
 
-  // Economia Dizzles 🪙
+// Economia Dizzles 🪙
   dizzles: { type: Number, default: 0 },
   lastDizzleTime: { type: Number, default: 0 },
 
@@ -370,6 +376,37 @@ if (command === 'saldo') {
 
   const stats = await getUserStats(targetUser.id);
 
+if (message.content.toLowerCase() === "barril") {
+
+    const now = Date.now();
+
+    // Se passaram mais de 10 segundos, reinicia
+    if (now - stats.barrelStart > 10000) {
+        stats.barrelStart = now;
+        stats.barrelCount = 1;
+    } else {
+        stats.barrelCount++;
+    }
+
+    // Conquista!
+    if (stats.barrelCount >= 3) {
+
+        if (!stats.specialRoles.includes("barrel")) {
+            stats.specialRoles.push("barrel");
+
+            await message.reply(
+                "**CONQUISTA DESBLOQUEADA!**\n\n🛢️ Você desbloqueou o cargo secreto **BARRIL**!\nUse **/roles** para equipá-lo."
+            );
+        }
+
+        // Reinicia a contagem
+        stats.barrelCount = 0;
+        stats.barrelStart = 0;
+    }
+
+    await stats.save();
+}
+
   message.reply({
     content: `**${targetUser.username}** possui **${stats.dizzles} <:emoji_20:1529517320118993076>**!`
   });
@@ -457,22 +494,35 @@ module.exports = {
         `Seu nível: **${stats.level}**\n\nEscolha um dos cargos abaixo.`
       );
 
+  const progressMenu = new StringSelectMenuBuilder()
+  .setCustomId("equip_level_role")
+  .setPlaceholder("Selecionar cargos de progressão")
+  .addOptions(availableRoles);
 
-    const menu = new StringSelectMenuBuilder()
-      .setCustomId("equip_role")
-      .setPlaceholder("Selecione um cargo...")
-      .addOptions(availableRoles);
+const achievementRoles = [];
 
-
-    const row = new ActionRowBuilder()
-      .addComponents(menu);
-
-
-    await interaction.reply({
-      embeds: [embed],
-      components: [row],
-      ephemeral: true
+if (stats.specialRoles.includes("barrel")) {
+    achievementRoles.push({
+        label: "BARRIL 🛢️",
+        value: "1530266523674083489",
+        description: "Conquista secreta"
     });
+}
+
+const achievementMenu = new StringSelectMenuBuilder()
+    .setCustomId("equip_achievement_role")
+    .setPlaceholder("Selecionar cargos de conquistas")
+    .addOptions(
+        achievementRoles.length > 0
+            ? achievementRoles
+            : [
+                {
+                    label: "Nenhuma conquista desbloqueada",
+                    value: "none",
+                    description: "Você ainda não possui cargos de conquista"
+                }
+            ]
+    );
 
   }
 };
@@ -641,7 +691,10 @@ if (interaction.commandName === "leaderboard") {
 
 
     if (!interaction.isStringSelectMenu()) return;
-    if (interaction.customId !== "equip_role") return;
+    if (
+    interaction.customId !== "equip_level_role" &&
+    interaction.customId !== "equip_achievement_role"
+) return;
 
     try {
 
