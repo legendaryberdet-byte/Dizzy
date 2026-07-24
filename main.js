@@ -182,13 +182,18 @@ client.on('ready', async () => {
 
     new SlashCommandBuilder()
     .setName("profile")
-    .setDescription("Veja seu perfil ou o de outro usuário")
+    .setDescription("Veja seu perfil ou de outro usuário")
     .addUserOption(option =>
       option
         .setName("usuario")
         .setDescription("Usuário que deseja visualizar")
         .setRequired(false)
     )
+    .toJSON(),
+  
+  new SlashCommandBuilder()
+    .setName("leaderboard")
+    .setDescription("Mostra o ranking de XP entre os usuários")
     .toJSON()
 
    ]
@@ -349,39 +354,6 @@ if (command === 'saldo') {
       });
     }
 
-    // Comando: !leaderboard
-    if (command === 'leaderboard' || command === 'top') {
-      const users = await User.find().sort({ xp: -1 }).limit(10);
-
-      const leaderboardText = await Promise.all(
-        users.map(async (stats, index) => {
-          try {
-            const user = await client.users.fetch(stats.userId);
-            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-            return `${medal} **${user.username}** — Nível ${stats.level} • ${stats.xp} XP`;
-          } catch {
-            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-            return `${medal} **Unknown User** — Nível ${stats.level} • ${stats.xp} XP`;
-          }
-        })
-      );
-
-      message.reply({
-        embeds: [
-          {
-            color: 0xffd700,
-            title: '🏆 Leaderboard de XP',
-            description: leaderboardText.join('\n'),
-            footer: {
-              text: 'Use /pf para ver seus stats!',
-            },
-          },
-        ],
-      });
-    }
-  }
-});
-
 const {
   SlashCommandBuilder
 } = require('discord.js');
@@ -452,6 +424,49 @@ module.exports = {
 client.on("interactionCreate", async interaction => {
 
     if (interaction.isChatInputCommand()) {
+
+if (interaction.commandName === "leaderboard") {
+
+    const users = await User.find().sort({ xp: -1 }).limit(10);
+
+    const leaderboardText = await Promise.all(
+        users.map(async (stats, index) => {
+            try {
+                const user = await client.users.fetch(stats.userId);
+
+                const medal =
+                    index === 0 ? "🥇" :
+                    index === 1 ? "🥈" :
+                    index === 2 ? "🥉" :
+                    `${index + 1}.`;
+
+                return `${medal} **${user.username}** — Nível ${stats.level} • ${stats.xp} XP`;
+            } catch {
+                const medal =
+                    index === 0 ? "🥇" :
+                    index === 1 ? "🥈" :
+                    index === 2 ? "🥉" :
+                    `${index + 1}.`;
+
+                return `${medal} **Unknown User** — Nível ${stats.level} • ${stats.xp} XP`;
+            }
+        })
+    );
+
+    return interaction.reply({
+        embeds: [
+            {
+                color: 0xffd700,
+                title: "🏆 Leaderboard de XP",
+                description: leaderboardText.join("\n"),
+                footer: {
+                    text: "Use /profile para ver seus stats!"
+                }
+            }
+        ]
+    });
+
+}
 
     if (interaction.commandName === "profile") {
 
