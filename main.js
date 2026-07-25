@@ -676,7 +676,6 @@ if (
 
 }
 })
-console.log(prontinho, meu delícia 😩😏);
 });
 // Conectar ao Discord
 client.login(process.env.DISCORD_TOKEN);
