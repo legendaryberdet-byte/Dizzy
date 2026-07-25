@@ -444,6 +444,9 @@ const now = Date.now();
 
 client.on("interactionCreate", async interaction => {
 
+if (!interaction.isStringSelectMenu()) return;
+
+
     if (interaction.isChatInputCommand()) {
 
 
@@ -625,8 +628,6 @@ if (interaction.commandName === "leaderboard") {
             ],
         });
     }    
-
-if (!interaction.isStringSelectMenu()) return;
 
 if (
     interaction.customId !== "equip_level_role" &&
