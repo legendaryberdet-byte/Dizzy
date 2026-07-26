@@ -626,7 +626,7 @@ if (interaction.commandName === "leaderboard") {
         });
     }   
 
-)}
+};
 
 console.log("É StringSelectMenu?", interaction.isStringSelectMenu());
 console.log("Custom ID:", interaction.customId);
