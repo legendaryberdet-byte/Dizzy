@@ -625,7 +625,7 @@ if (interaction.commandName === "leaderboard") {
         });
     }   
 
-if (!interaction.isStringSelectMenu()) return;
+if (!interaction.isStringSelectMenu())
 
 if (
     interaction.customId !== "equip_level_role" &&
