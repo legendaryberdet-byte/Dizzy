@@ -362,8 +362,8 @@ if (result.leveledUp) {
 };
 
 // Comando: Ver XP/Level (prefix command)
-client.on('messageCreate', async (message) => {
-  if (message.author.bot || !message.guild) return;
+  
+if (message.author.bot || !message.guild) return;
 
   if (message.content.startsWith(config.prefix)) {
     const args = message.content.slice(config.prefix.length).trim().split(/ +/);
@@ -437,10 +437,6 @@ const now = Date.now();
 }
 
 }
-
-
-});
-
 
 client.on("interactionCreate", async interaction => {
       
