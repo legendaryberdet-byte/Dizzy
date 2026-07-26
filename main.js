@@ -509,7 +509,7 @@ const achievementMenu = new StringSelectMenuBuilder()
    const row2 = new ActionRowBuilder()
     .addComponents(achievementMenu);
 
-await interaction.reply({
+return await interaction.reply({
     embeds: [embed],
     components: [row1, row2],
     ephemeral: true
