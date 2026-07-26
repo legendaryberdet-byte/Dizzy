@@ -443,12 +443,13 @@ const now = Date.now();
 
 
 client.on("interactionCreate", async interaction => {
+         console.log("1 - interaction recebida");
 
 if (!interaction.isStringSelectMenu()) return;
-
+         console.log("2 - slash:", interaction.commandName);
 
     if (interaction.isChatInputCommand()) {
-
+         console.log("3 - menu:", interaction.customId);
 
 if (interaction.commandName === "roles") {
 
