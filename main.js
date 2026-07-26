@@ -626,6 +626,9 @@ if (interaction.commandName === "leaderboard") {
         });
     }   
 
+console.log("É StringSelectMenu?", interaction.isStringSelectMenu());
+console.log("Custom ID:", interaction.customId);
+
 if (!interaction.isStringSelectMenu())
       return;
 if (
@@ -633,7 +636,9 @@ if (
     interaction.customId !== "equip_achievement_role"
 ) return;
 
-     try {
+   console.log("Entrou no try");
+
+  try {
 
         const roleId = interaction.values[0];
 
