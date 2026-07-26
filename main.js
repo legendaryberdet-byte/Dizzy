@@ -438,8 +438,6 @@ const now = Date.now();
 
 }
 
-});
-
 client.on("interactionCreate", async interaction => {
     
 console.log("Interação recebida:", interaction.type);
