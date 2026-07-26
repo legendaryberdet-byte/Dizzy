@@ -439,8 +439,11 @@ const now = Date.now();
 }
 
 client.on("interactionCreate", async interaction => {
-      
-    if (interaction.isChatInputCommand()) {    
+    
+console.log("Interação recebida:", interaction.type);
+    
+if (interaction.isChatInputCommand()) {    
+     console.log("Slash:", interaction.commandName);
 
 if (interaction.commandName === "roles") {
 
