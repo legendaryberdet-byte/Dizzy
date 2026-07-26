@@ -508,7 +508,7 @@ const achievementMenu = new StringSelectMenuBuilder()
 
    const row2 = new ActionRowBuilder()
     .addComponents(achievementMenu);
-
+        console.log("VAI RESPONDER /roles");
 return await interaction.reply({
     embeds: [embed],
     components: [row1, row2],
