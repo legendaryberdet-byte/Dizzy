@@ -575,7 +575,7 @@ if (interaction.commandName === "leaderboard") {
         const xpNeeded = nextLevelXp - currentLevelXp;
         const xpRemaining = xpNeeded - xpProgress;
         const percentage = Math.round((xpProgress / xpNeeded) * 100);
-
+       console.log("VAI RESPONDER /profile");
         return interaction.reply({
             embeds: [
                 {
