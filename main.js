@@ -623,8 +623,8 @@ if (interaction.commandName === "leaderboard") {
                 },
             ],
         });
-    } 
-    }   
+    }, 
+    });   
 
 if (!interaction.isStringSelectMenu()) return;
 
