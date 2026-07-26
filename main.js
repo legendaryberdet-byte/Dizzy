@@ -447,6 +447,9 @@ if (interaction.isChatInputCommand()) {
 
 if (interaction.commandName === "roles") {
 
+     await
+    interaction.deferReply({ ephemeral: true });
+
     const stats = await getUserStats(interaction.user.id);
 
     const availableRoles = [];
@@ -509,10 +512,9 @@ const achievementMenu = new StringSelectMenuBuilder()
    const row2 = new ActionRowBuilder()
     .addComponents(achievementMenu);
         console.log("VAI RESPONDER /roles");
-return await interaction.reply({
+return await interaction.editReply({
     embeds: [embed],
-    components: [row1, row2],
-    ephemeral: true
+    components: [row1, row2]
 });
 
 
