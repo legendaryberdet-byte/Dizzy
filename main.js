@@ -438,6 +438,8 @@ const now = Date.now();
 
 }
 
+});
+
 client.on("interactionCreate", async interaction => {
     
 console.log("Interação recebida:", interaction.type);
@@ -625,7 +627,7 @@ if (interaction.commandName === "leaderboard") {
     }   
 
 if (!interaction.isStringSelectMenu())
-
+      return;
 if (
     interaction.customId !== "equip_level_role" &&
     interaction.customId !== "equip_achievement_role"
